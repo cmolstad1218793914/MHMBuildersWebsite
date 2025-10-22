@@ -1,0 +1,650 @@
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+.top-left {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  display: flex;
+  gap: 8px;
+  z-index: 1000;
+}
+
+.brand {
+  position: fixed;
+  top: 50px;
+  left: 50px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255,255,255,0.08);
+  padding: 12px 16px;
+  border-radius: 8px;
+  color: #e6f7ef;
+  line-height: 1.3;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  box-shadow: 0 6px 20px rgba(2,6,23,0.35);
+  z-index: 1000;
+}
+
+.brand-name {
+  font-weight: 700;
+  font-size: 45px;
+  color: #e6f7ef;
+}
+
+.brand-sub {
+  font-size: 32px;
+  color: rgba(230,247,239,0.9);
+  margin-top: 3px;
+}
+
+.brand-lic {
+  font-size: 10px;
+  color: rgba(230,247,239,0.75);
+  margin-top: 3px;
+}
+
+.top-button {
+  background: #1f2937;
+  color: #fff;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  transition: transform 0.08s, background-color 0.1s;
+}
+
+.top-button:hover { transform: translateY(-1px); }
+
+.top-button.active {
+  background: #06b6d4;
+  color: #0b1220;
+  box-shadow: 0 4px 10px rgba(6, 182, 212, 0.15);
+}
+
+/* Scrollable view container */
+.view {
+  width: 100%;
+  min-height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-snap-type: y mandatory;
+}
+
+/* Hero section wrapper */
+.hero-wrapper {
+  min-height: 100vh; /* changed from height to min-height */
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+/* container holds 4 side-by-side sections */
+.sections {
+  display: flex;
+  gap: 12px;
+  flex: 1;
+  min-height: 0;
+  align-items: stretch;
+  overflow: hidden;
+  border-radius: 12px;
+  margin: 60px 40px 20px 40px;
+}
+
+
+.footer-box {
+  background: rgba(219, 255, 217, 0.12);
+  padding: 24px 32px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.slogan {
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: 35px;
+  font-weight: 600;
+  font-style: italic;
+  color: #d1fae5;
+  margin-bottom: 12px;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.services-list {
+  font-size: 14px;
+  color: #a7f3d0;
+  line-height: 1.6;
+  font-weight: 400;
+  letter-spacing: 0.3px;
+}
+
+/* default: each section is equal width */
+.section {
+  position: relative;
+  flex: 1 1 0%;
+  background-size: cover;
+  background-position: center;
+  border-radius: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: flex 450ms cubic-bezier(.2,.9,.2,1), filter 300ms;
+  cursor: pointer;
+  filter: brightness(0.6);
+}
+
+/* dark overlay by default */
+.section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(54, 125, 0, 0.76);
+  mix-blend-mode: multiply;
+  transition: background 300ms;
+  z-index: 1;
+}
+
+/* when hovering container, shrink non-hovered sections */
+.sections:hover .section {
+  flex: 0.5 1 0%;
+}
+
+/* hovered section expands to take more space */
+.sections:hover .section:hover {
+  flex: 0.8 1 0%;
+  filter: brightness(1);
+}
+
+/* remove overlay on hovered section */
+.section:hover::before {
+  background: rgba(0,0,0,0.1);
+}
+
+/* content above overlay */
+.section-content {
+  position: relative;
+  z-index: 2;
+  color: #ffffff;
+  text-align: center;
+  padding: 20px;
+  transform: translateY(0);
+  transition: transform 300ms;
+}
+
+.section-content h2 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-shadow: 0 4px 12px rgba(0,0,0,0.8);
+}
+
+/* subtle lift on hover */
+.section:hover .section-content {
+  transform: translateY(-8px);
+}
+
+/* keyboard accessibility */
+.section:focus {
+  outline: none;
+  box-shadow: inset 0 0 0 4px rgba(6,182,212,0.4);
+  filter: brightness(1);
+}
+.section:focus::before {
+  background: rgba(0,0,0,0.1);
+}
+
+/* Full-page scrollable sections */
+.page-section {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+.page-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(54, 125, 0, 0.65);
+  mix-blend-mode: multiply;
+  z-index: 1;
+}
+
+.page-section-content {
+  position: relative;
+  z-index: 2;
+  color: #ffffff;
+  text-align: center;
+  padding: 60px 40px;
+  max-width: 900px;
+}
+
+.page-section-content h2 {
+  font-size: 3.5rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+  text-shadow: 0 4px 16px rgba(0,0,0,0.8);
+  color: #e6f7ef;
+}
+
+.page-section-content p {
+  font-size: 1.25rem;
+  line-height: 1.8;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+  color: #d1fae5;
+}
+
+/* mobile: stack vertically */
+@media (max-width: 800px) {
+  .brand {
+    top: 80px;
+    left: 16px;
+    right: 16px;
+  }
+  
+  .brand-name {
+    font-size: 28px;
+  }
+  
+  .brand-sub {
+    font-size: 20px;
+  }
+  
+  .hero-wrapper {
+    padding: 120px 20px 20px 20px;
+  }
+  
+  .sections {
+    flex-direction: column;
+    height: auto;
+  }
+  
+  .sections:hover .section,
+  .section:hover {
+    flex: 1;
+  }
+  
+  .section {
+    min-height: 25vh;
+  }
+  
+  .slogan {
+    font-size: 24px;
+  }
+  
+  .services-list {
+    font-size: 12px;
+  }
+  
+  .page-section-content h2 {
+    font-size: 2rem;
+  }
+  
+  .page-section-content p {
+    font-size: 1rem;
+  }
+}
+
+
+/* VIEW 2 */
+.view-2 {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-snap-type: none;
+}
+
+/* Top navigation banner - sticky at top */
+.nav-banner {
+  position: sticky;
+  top: 0;
+  display: flex;
+  justify-content: right;
+  align-items: right;
+  gap: 40px;
+  background: rgba(254, 255, 248, 0.95);
+  padding: 40px 60px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  z-index: 100;
+  backdrop-filter: blur(10px);
+}
+
+.nav-link {
+  color: #000000;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  transition: color 0.2s, transform 0.2s;
+  white-space: nowrap;
+}
+.nav-link:not(:last-child)::after {
+  content: "|"; /* Add a vertical bar after each link except the last one */
+  margin-left: 16px; /* Add spacing between the link and the bar */
+  color: #000000; /* Match the color of the links */
+}
+.nav-link:hover {
+  color: #10b981;
+  transform: translateY(-2px);
+}
+
+.hero-image {
+  min-height: 100vh;
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+.hero-image::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(18, 27, 12, 0.5);
+  mix-blend-mode: multiply;
+}
+
+/* Company info centered on hero image */
+.company-info {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  color: #ffffff;
+  border-radius: 12px;
+}
+
+.company-name {
+  font-family: 'Cormorant Garamond', serif; /* A more spindly and elegant serif font */
+  font-size: 7rem; /* Taller font size */
+  font-weight: 300; /* Lighter weight for a more delicate look */
+  margin: 0 0 16px 0;
+  letter-spacing: 1.5px; /* Slightly increased spacing for elegance */
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4); /* Subtle shadow for depth */
+  color: #fdfff5;
+}
+
+.company-title {
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: 1.9rem;
+  font-weight: 400;
+  font-style: italic;
+  margin: 0 0 20px 0;
+  color: #fdfff5;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+}
+
+.company-license {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin: 0;
+  letter-spacing: 1.5px;
+  color: #a7f3d0;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+}
+
+.contact-form-wrapper {
+  position: relative; /* stays in the document flow */
+  width: 500px;
+  max-width: 90vw;
+  margin: -160px auto 0; /* increased negative margin to make it peek more */
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  overflow: hidden; /* ensure content doesn't overflow */
+}
+
+.contact-form-header {
+  background: rgba(200, 200, 200, 0.3);
+  padding: 16px 24px;
+  text-align: center;
+  font-size: 22px;
+  font-weight: 700;
+  color: #1a1a1a;
+  border-radius: 16px 16px 0 0;
+  border-bottom: 1px solid rgba(0,0,0,0.2);
+}
+
+.contact-form {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: rgba(240, 255, 233, 0.98);
+  max-height: none; /* removed max-height animation */
+  overflow: visible;
+}
+
+/* removed hover animation rules */
+
+.form-input,
+.form-textarea {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid rgba(0,0,0,0.3);
+  border-radius: 8px;
+  background: rgba(255,255,255,0.9);
+  color: #1a1a1a;
+  font-size: 15px;
+  font-family: inherit;
+  transition: border-color 0.2s, background 0.2s;
+  box-sizing: border-box;
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+  color: rgba(0,0,0,0.5);
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: #666;
+  background: rgba(255,255,255,1);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.form-submit {
+  padding: 14px 28px;
+  background: #444;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.form-submit:hover {
+  background: #333;
+  transform: translateY(-2px);
+}
+
+.blank-section {
+  min-height: 100vh;
+  width: 100%;
+  background: #1a1a1a;
+  scroll-snap-align: none;
+  scroll-snap-stop: normal;
+  position: relative;
+}
+
+/* Mobile adjustments for view 2 */
+@media (max-width: 800px) {
+  .contact-form-wrapper {
+    width: 320px;
+  }
+  
+  .contact-form-header {
+    font-size: 16px;
+  }
+
+  .nav-banner {
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 16px 20px;
+  }
+  
+  .nav-link {
+    font-size: 14px;
+  }
+  
+  .company-name {
+    font-size: 2.5rem;
+  }
+  
+  .company-title {
+    font-size: 1.5rem;
+  }
+  
+  .company-license {
+    font-size: 0.9rem;
+  }
+}
+
+
+/* View 3 specific styles */
+.view-3 {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Top banner with company info */
+.view-3 .nav-banner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 20px 40px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  z-index: 100;
+}
+
+.company-info-top-left {
+  color: #ffffff;
+}
+
+.view-3 .company-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  font-weight: 400;
+  margin: 0;
+}
+
+.view-3 .company-title {
+  font-size: 1.5rem;
+  font-weight: 300;
+  margin: 5px 0;
+}
+
+.company-license {
+  font-size: 1rem;
+  font-weight: 300;
+  margin: 0;
+}
+
+/* Background image with slogan */
+.background-image {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  z-index: 1;
+}
+
+.slogan-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 3rem;
+  font-weight: 400;
+  color: #ffffff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+  text-align: center;
+  z-index: 2;
+}
+
+/* Contact form in the bottom left */
+.contact-form-bottom-left {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  width: 400px; /* Wider form */
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  z-index: 2;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.form-input,
+.form-textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.form-textarea {
+  resize: none;
+}
+
+.form-submit {
+  padding: 10px;
+  background: #333;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.form-submit:hover {
+  background: #555;
+}
