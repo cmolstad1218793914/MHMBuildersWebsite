@@ -32,7 +32,7 @@ Setup steps:
 3. Create a service account with the `Firebase Hosting Admin` role:
 	- Go to Console > Project settings > Service accounts > Generate new private key.
 	- This downloads a JSON file. Keep it safe.
-4. Add the service account JSON as a GitHub secret in your repository settings named `FIREBASE_SERVICE_ACCOUNT`.
+4. Add the service account JSON as a GitHub secret in your repository settings named `FIREBASE_TOKEN`.
 	- Copy the entire JSON file contents into the secret value.
 5. Push to `main`. The GitHub Actions workflow will build and deploy automatically.
 
