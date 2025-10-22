@@ -23,7 +23,7 @@ function App() {
         <div className="view">
           {/* Hero section with accordion */}
           <div className="brand" aria-label="MHM Builders information">
-            <div className="brand-name">MMMMMMMM Builders, Inc.</div>
+            <div className="brand-name">MHM Builders, Inc.</div>
             <div className="brand-sub">General Contractors</div>
             <div className="brand-lic">ROC NO. 251714 &amp; 267667</div>
           </div>
