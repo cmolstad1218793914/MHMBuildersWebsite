@@ -321,14 +321,14 @@ html, body, #root {
   position: sticky;
   top: 0;
   display: flex;
-  justify-content: right;
-  align-items: right;
-  gap: 40px;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
   background: rgba(254, 255, 248, 0.95);
-  padding: 40px 60px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  padding: 20px 40px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
   z-index: 100;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(6px);
 }
 
 .nav-link {
@@ -340,6 +340,24 @@ html, body, #root {
   transition: color 0.2s, transform 0.2s;
   white-space: nowrap;
 }
+
+.nav-left { display: flex; align-items: center; }
+.nav-home { font-size: 18px; font-weight: 700; color: #000; text-decoration: none; margin-right: 12px; }
+
+.nav-center {
+  /* center the logo exactly in the viewport using absolute positioning */
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none; /* allow clicks to pass to left/right links unless explicitly enabled on the logo */
+}
+.nav-right { display: flex; align-items: center; gap: 20px; }
+
+.nav-logo { height: 64px; width: auto; object-fit: contain; pointer-events: auto; }
 .nav-link:not(:last-child)::after {
   content: "|"; /* Add a vertical bar after each link except the last one */
   margin-left: 16px; /* Add spacing between the link and the bar */
@@ -516,6 +534,20 @@ html, body, #root {
     gap: 16px;
     padding: 16px 20px;
   }
+
+  /* On smaller screens revert centered logo to flow layout so it doesn't overlap nav items */
+  .nav-center {
+    position: static;
+    transform: none;
+    pointer-events: auto;
+    order: 2; /* place logo after left/nav items when wrapped */
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 8px;
+  }
+
+  .nav-logo { height: 48px; }
   
   .nav-link {
     font-size: 14px;
@@ -539,21 +571,29 @@ html, body, #root {
 .view-3 {
   position: relative;
   height: 100vh;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 /* Top banner with company info */
 .view-3 .nav-banner {
-  position: absolute;
+  position: sticky;
   top: 0;
   left: 0;
   width: 100%;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.3);
   padding: 20px 40px;
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
   z-index: 100;
+  transition: background-color 200ms ease, padding 200ms ease, box-shadow 200ms ease;
+}
+/* ...existing code... */
+.view-3 .nav-banner.scrolled {
+  background: #2e2e2e;
+  padding: 12px 28px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.35);
 }
 
 .company-info-top-left {
@@ -565,18 +605,51 @@ html, body, #root {
   font-size: 2rem;
   font-weight: 400;
   margin: 0;
+  color: #0b1220;
 }
 
 .view-3 .company-title {
   font-size: 1.5rem;
   font-weight: 300;
   margin: 5px 0;
+  color: #0b1220;
 }
 
 .company-license {
   font-size: 1rem;
   font-weight: 300;
   margin: 0;
+  color: #002b08;
+}
+
+.view-3 .nav-banner.scrolled .company-name {
+  font-size: 1.7rem;
+  color: #ffffff;
+}
+
+.view-3 .nav-banner.scrolled .company-title {
+  font-size: 1.2rem;
+  color: #ffffff;
+}
+
+.view-3 .nav-banner.scrolled .company-license {
+  font-size: 0.9rem;
+  opacity: 0.85;
+  color: #befcb1;
+}
+
+.view-3 .nav-center { display: flex; align-items: center; gap: 20px; }
+.view-3 .nav-banner.scrolled .nav-link {
+  color: #f1f1f1;
+}
+.view-3 .nav-banner.scrolled .nav-link:not(:last-child)::after {
+  color: #f1f1f1;
+}
+.view-3 .nav-banner.scrolled .nav-link {
+  color: #f1f1f1;
+}
+.view-3 .nav-banner.scrolled .nav-link:not(:last-child)::after {
+  color: #f1f1f1;
 }
 
 /* Background image with slogan */
@@ -604,47 +677,88 @@ html, body, #root {
 
 /* Contact form in the bottom left */
 .contact-form-bottom-left {
-  position: absolute;
-  bottom: 20px;
-  left: 20px;
-  width: 400px; /* Wider form */
-  background: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  position: sticky;
+  bottom: 24px;
+  left: 0px;
+  width: 420px;
+  background: rgba(22, 22, 22, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 20px 22px 20px 66px;
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.45), 12px 0 30px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  overflow: hidden;
   z-index: 2;
 }
+.contact-form-bottom-left::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -12px;
+  width: 12px;
+  background: linear-gradient(180deg, #1f1f1f, #2a2a2a);
+  border-radius: 0 10px 10px 0;
+  box-shadow: 6px 0 16px rgba(0, 0, 0, 0.35);
+}
 
-.contact-form {
+/* ...existing code... */
+.view-3 .contact-form {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 14px;
+  background: transparent;
+  padding: 0;
 }
 
-.form-input,
-.form-textarea {
+/* ...existing code... */
+.view-3 .form-input,
+.view-3 .form-textarea {
   width: 100%;
-  padding: 10px;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: 4px;
-  font-size: 14px;
-}
-
-.form-textarea {
-  resize: none;
-}
-
-.form-submit {
-  padding: 10px;
-  background: #333;
-  color: #fff;
+  padding: 10px 0 12px 0;
+  background: transparent;
   border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
+  border-bottom: 1.5px solid rgba(255, 255, 255, 0.28);
+  border-radius: 0;
+  font-size: 15px;
+  color: #f1f1f1;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
 
-.form-submit:hover {
-  background: #555;
+/* ...existing code... */
+.view-3 .form-input::placeholder,
+.view-3 .form-textarea::placeholder {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* ...existing code... */
+.view-3 .form-input:focus,
+.view-3 .form-textarea:focus {
+  border-bottom-color: #b7ffd0;
+  box-shadow: 0 1px 0 0 #b7ffd0;
+}
+
+/* ...existing code... */
+.view-3 .form-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* ...existing code... */
+.view-3 .form-submit {
+  align-self: right;
+  padding: 10px 130px;
+  background: #2e2e2e;
+  color: #f5f5f5;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 700;
+  transition: background 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+}
+.view-3 .form-submit:hover {
+  background: #3a3a3a;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
 }
