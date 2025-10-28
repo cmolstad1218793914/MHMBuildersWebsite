@@ -9,6 +9,14 @@ body {
   scrollbar-gutter: stable;
 }
 
+/* Shared site container: centers content and caps width consistently */
+.site-container {
+  width: min(1200px, 96%);
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+}
+
 /* Utility class to apply Orbitron (loaded via /public/fonts.css) */
 .font-orbitron {
   font-family: 'Orbitron', sans-serif;
@@ -46,6 +54,29 @@ body {
 .nav-left { display: flex; align-items: center; }
 .nav-home { font-size: 18px; font-weight: 700; color: #000; text-decoration: none; margin-right: 12px; }
 
+/* Company info block in top-left */
+.nav-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+  line-height: 1.2;
+  flex-direction: row;
+  align-items: flex-end;
+  padding: 0px 50px;
+}
+.nav-info__title {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: #000;
+}
+.nav-info__line {
+  font-size: 14px;
+  color: #111;
+}
+
+.nav-info__address { margin-top: 2px; }
+
 .nav-center {
   /* center the logo exactly in the viewport using absolute positioning */
   position: absolute;
@@ -61,9 +92,10 @@ body {
 
 .contact-links {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: flex-end;
-  gap: 12px;
+  padding: 15px 30px;
+  gap: 50px;
   line-height: 1.2;
 }
 
@@ -71,7 +103,8 @@ body {
   color: #000000;
   text-decoration: none;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 500;
+  font-family: 'Orbitron', sans-serif;
   letter-spacing: 0.3px;
   transition: color 0.2s ease;
   display: inline-flex;
@@ -87,6 +120,45 @@ body {
   width: 18px;
   height: 18px;
   flex: 0 0 auto;
+}
+
+/* Diamond-backed contact icons */
+.contact-icon {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  flex: 0 0 auto;
+  display: inline-grid;
+  place-items: center;
+  margin-right: 2px;
+}
+.contact-icon::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: rotate(45deg);
+  background: #ffffff;
+  border: 1.5px solid #90ac2f;
+  border-radius: 4px;
+  transition: background .15s ease, border-color .15s ease, box-shadow .15s ease;
+}
+.contact-icon__svg {
+  width: 16px;
+  height: 16px;
+  color: #111;
+  z-index: 1;
+}
+
+/* Hover/focus sync with link */
+.contact-link:hover .contact-icon::before,
+.contact-link:focus-visible .contact-icon::before {
+  background: #111;
+  border-color: #111;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+.contact-link:hover .contact-icon__svg,
+.contact-link:focus-visible .contact-icon__svg {
+  color: #fff;
 }
 
 .nav-logo { height: 264px; width: auto; object-fit: contain; pointer-events: auto; }
@@ -196,9 +268,9 @@ body {
 }
 
 .company-name {
-  font-family: 'Cormorant Garamond', serif; /* A more spindly and elegant serif font */
-  font-size: 7rem; /* Taller font size */
-  font-weight: 300; /* Lighter weight for a more delicate look */
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 7rem;
+  font-weight: 300;
   margin: 0 0 16px 0;
   letter-spacing: 1.5px; /* Slightly increased spacing for elegance */
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4); /* Subtle shadow for depth */
@@ -231,9 +303,8 @@ body {
   background-color: #e9e9e9;
 }
 
-/* Ensure in-page anchors account for the sticky sub-nav height */
 .anchor-section {
-  scroll-margin-top: 120px; /* adjust if your sub-nav height changes */
+  scroll-margin-top: -20px;
 }
 
 .collage-wrapper {
@@ -262,6 +333,31 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* Pagination dots under the collage */
+.collage-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: #d8d8d8;
+  border: 1px solid #bdbdbd;
+  padding: 0;
+  margin: 0 6px;
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease, transform .15s ease, box-shadow .15s ease;
+}
+.collage-dot:hover,
+.collage-dot:focus-visible {
+  background: #c9c9c9;
+  border-color: #a5a5a5;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0,0,0,0.1);
+}
+.collage-dot.is-active {
+  background: #90ac2f;
+  border-color: #90ac2f;
+  transform: scale(1.08);
 }
 
 .collage-arrow {
@@ -409,8 +505,8 @@ body {
   padding: 8px 0 16px;     /* modest vertical breathing room */
   box-sizing: border-box;
 }
-
 .form-title {
+  text-align: center;
   margin: 0 0 6px 0;
   font-size: 28px;
   font-weight: 700;
@@ -419,7 +515,8 @@ body {
 }
 
 .form-subtitle {
-  margin: 0 0 18px 0;
+  text-align: center;
+  margin: 0 0 48px 0;
   color: #444;
   font-size: 15px;
 }
@@ -579,6 +676,9 @@ body {
     padding: 16px 20px;
   }
 
+  .nav-info__title { font-size: 14px; }
+  .nav-info__line { font-size: 12px; }
+
   /* On smaller screens revert centered logo to flow layout so it doesn't overlap nav items */
   .nav-center {
     position: static;
@@ -625,3 +725,235 @@ body {
   .tile--left { aspect-ratio: 16 / 9; grid-row: auto; grid-column: 1; }
   .tile--top, .tile--bottom { grid-column: 1; grid-row: auto; }
 }
+
+/* ==========================
+   About Us section styles
+   ========================== */
+.about-section {
+  position: relative;
+  display: block;
+  padding: 42px 16px;
+  margin-top: 12px;
+  border-top: 1px solid #90ac2f; /* very thin green line between sections */
+  background: #f6f7f8;
+  min-height: 460px;          /* give section presence so image can be larger */
+}
+
+.about-container {
+  width: min(1200px, 96%);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1.25fr; /* make the image column larger */
+  gap: 28px;
+  align-items: center;         /* center text vertically relative to image */
+}
+
+.about-title {
+  font-family: 'Libre Baskerville', serif;
+  margin: 0 0 14px 0;
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: #111;
+}
+
+.about-content {
+  color: #222;
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+.about-content p { 
+  margin: 0 0 14px 0;
+}
+.about-content p:last-child { margin-bottom: 0; }
+
+.about-link {
+  color: #90ac2f;
+  text-decoration: underline;
+}
+.about-link:hover { color: #63761f; }
+
+.about-outro {
+  font-weight: 600;
+  color: #111;
+}
+
+/* Bigger image inside its grid column, keeps text centered in the content area */
+.about-image { margin: 0; align-self: stretch; }
+.about-image img {
+  display: block;
+  width: 100%;
+  height: 100%;              /* fill column height */
+  object-fit: cover;         /* crop nicely if needed */
+  border-radius: 12px;       /* restore soft corners */
+  box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+}
+
+@media (max-width: 1000px) {
+  .about-section { padding: 40px 16px; min-height: 0; }
+  .about-container { grid-template-columns: 1fr; }
+  .about-image { width: 100%; height: 240px; }
+  .about-image img { height: 100%; }
+}
+/* ==========================
+   Commercial section styles
+   ========================== */
+.commercial-section {
+  position: relative;
+  display: block;
+  padding: 42px 16px;            /* match About section spacing */
+  margin-top: 12px;              /* slight separation from previous section */
+  border-top: 1px solid #90ac2f; /* same green line as About */
+  background: #f6f7f8;           /* same soft background tone */
+}
+
+/* Container width to match About (redundant with .site-container, but explicit) */
+.commercial-container {
+  width: min(1200px, 96%);
+  margin: 0 auto;
+}
+
+.commercial-head { margin: 0 0 18px 0; text-align: left; }
+.commercial-title {
+  font-family: 'Libre Baskerville', serif;
+  margin: 0 0 8px 0;
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: #111;
+}
+.commercial-subtitle {
+  font-family: 'Libre Baskerville', serif;
+  margin: 0;
+  color: #444;
+  font-size: 14px;
+}
+
+/* 4-square grid of service groups */
+.services-groups {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* 2 x 2 on desktop */
+  gap: 24px;
+
+}
+
+
+.service-group {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.service-group:hover,
+.service-group:focus-within {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(0,0,0,0.12);
+}
+
+.service-group__media {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 16 / 9;  /* consistent top image shape */
+  overflow: hidden;
+  margin: 0;                  /* remove default figure margins */
+  display: block;             /* ensure full-width block */
+  line-height: 0;             /* avoid stray inline spacing */
+  border-bottom: 1px solid #90ac2f; /* subtle divider under image */
+  border-top-left-radius: 12px;     /* round only the top of the picture */
+  border-top-right-radius: 12px;
+}
+.service-group__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.service-group__title {
+  margin: 12px 16px 6px 16px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #111;
+  letter-spacing: 0.2px;
+  font-family: 'Libre Baskerville', serif;
+}
+
+.service-group__list {
+  margin: 0 16px 16px 32px; /* indent for bullets */
+  padding: 0;
+  color: #222;
+  font-size: 14px;
+  line-height: 1.55;
+}
+.service-group__list li { margin-bottom: 6px; }
+.service-group__list li:last-child { margin-bottom: 0; }
+
+/* Responsive: stack to single column on narrow screens */
+@media (max-width: 900px) {
+  .services-groups { grid-template-columns: 1fr; }
+}
+
+/* ==========================
+   Projects page styles
+   ========================== */
+.projects-page {
+  position: relative;
+  display: block;
+  padding: 42px 16px;
+  background: #e7e7e7;
+}
+
+.projects-head { margin: 0 0 18px 0; }
+.projects-title {
+  margin: 0 0 8px 0;
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: #111;
+  font-family: 'Libre Baskerville', serif;
+}
+.projects-subtitle { margin: 0; color: #444; font-size: 16px; }
+
+.projects-list {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0 0 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.project-row {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 16px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+  overflow: hidden;
+}
+.project-media { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+.project-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.project-body { padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; }
+.project-meta { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.project-title { margin: 0; font-size: 18px; font-weight: 700; color: #111; font-family: 'Libre Baskerville', serif; }
+.project-date { color: #555; font-size: 14px; }
+.project-desc { margin: 0; color: #222; font-size: 14px; line-height: 1.5; }
+.project-actions { margin-top: 4px; }
+.project-link { color: #90ac2f; text-decoration: underline; }
+.project-link:hover { color: #63761f; }
+
+.projects-footer { margin-top: 20px; }
+.projects-back { color: #90ac2f; text-decoration: none; }
+.projects-back:hover { text-decoration: underline; }
+
+@media (max-width: 800px) {
+  .project-row { grid-template-columns: 1fr; }
+  .project-media { height: 180px; }
+}
+  

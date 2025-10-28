@@ -87,6 +87,7 @@ function WorkOrderForm() {
   const lastNameInvalid = touched.lastName && values.lastName.trim() === ''
   const emailInvalid = touched.email && (values.email.trim() === '' || !validEmail)
   const phoneInvalid = touched.phone && values.phone.trim().length > 0 && !validPhone
+  const addressInvalid = touched.address && values.address.trim() === ''
 
   const onSubmit = (e) => {
     e.preventDefault()
@@ -156,7 +157,7 @@ function WorkOrderForm() {
 
             <div className="form-field form-field--full">
               <label htmlFor="address">Address</label>
-              <input id="address" name="address" type="text" value={values.address} onChange={onChange} onBlur={() => setTouched(t => ({ ...t, address: true }))} autoComplete="street-address" />
+              <input id="address" name="address" type="text" value={values.address} onChange={onChange} onBlur={() => setTouched(t => ({ ...t, address: true }))} autoComplete="street-address" required aria-invalid={addressInvalid} />
             </div>
           </div>
 
