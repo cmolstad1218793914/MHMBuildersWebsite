@@ -9,31 +9,7 @@ body {
   scrollbar-gutter: stable;
 }
 
-/* Register Orbitron fonts placed in /public/fonts */
-@font-face {
-  font-family: 'Orbitron';
-  src: url('/fonts/Orbitron-VariableFont_wght.ttf') format('truetype');
-  font-weight: 100 900; /* variable weight range */
-  font-style: normal;
-  font-display: swap;
-}
-/* Static fallbacks if variable-font support is missing */
-@font-face {
-  font-family: 'Orbitron';
-  src: url('/fonts/Orbitron-Medium.ttf') format('truetype');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: 'Orbitron';
-  src: url('/fonts/Orbitron-Black.ttf') format('truetype');
-  font-weight: 900;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* Utility class to apply Orbitron */
+/* Utility class to apply Orbitron (loaded via /public/fonts.css) */
 .font-orbitron {
   font-family: 'Orbitron', sans-serif;
   font-optical-sizing: auto;
