@@ -569,6 +569,34 @@ body {
   border-bottom-color: #ef4444;
 }
 
+/* Textarea styled to match inputs but a little taller */
+.form-field textarea {
+  appearance: none;
+  border: none;
+  border-bottom: 2px solid #d4d4d4;
+  border-radius: 0;
+  padding: 10px 2px;         /* slightly more padding for comfort */
+  font-size: 15px;
+  color: #111;
+  caret-color: #111;
+  outline: none;
+  background: transparent;
+  transition: border-bottom-color .15s ease;
+  resize: vertical;          /* allow vertical resize if user wants */
+  min-height: 96px;          /* a little taller by default */
+  line-height: 1.45;
+}
+.form-field textarea:focus {
+  border-bottom-color: #90ac2f;
+}
+.form-field textarea[aria-invalid="true"] {
+  border-bottom-color: #ef4444;
+}
+.form-field textarea::placeholder {
+  color: #9ca3af;
+  opacity: 1;
+}
+
 /* Upload area */
 .upload {
   margin-top: 18px;

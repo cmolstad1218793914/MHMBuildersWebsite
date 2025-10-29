@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 
 function WorkOrderForm() {
+  const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY
   const [values, setValues] = useState({
     firstName: '',
     lastName: '',
@@ -9,12 +10,16 @@ function WorkOrderForm() {
     phone: '',
     address: '',
     zip: '',
+    description: '',
   })
 
   const [images, setImages] = useState([]) // { file, url }
   const inputFileRef = useRef(null)
+  const recaptchaRef = useRef(null)
+  const [recaptchaId, setRecaptchaId] = useState(null)
   const [dragOver, setDragOver] = useState(false)
   const [submitted, setSubmitted] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
   const [touched, setTouched] = useState({
     firstName: false,
     lastName: false,
@@ -23,6 +28,7 @@ function WorkOrderForm() {
     phone: false,
     address: false,
     zip: false,
+    description: false,
   })
 
   const onChange = (e) => {
@@ -88,6 +94,69 @@ function WorkOrderForm() {
   const emailInvalid = touched.email && (values.email.trim() === '' || !validEmail)
   const phoneInvalid = touched.phone && values.phone.trim().length > 0 && !validPhone
   const addressInvalid = touched.address && values.address.trim() === ''
+  const descriptionInvalid = touched.description && values.description.trim() === ''
+
+  // Render the invisible reCAPTCHA widget once the script is available
+  useEffect(() => {
+    if (!siteKey) return
+    let cancelled = false
+    const attemptRender = () => {
+      if (cancelled) return
+      const grecaptcha = window.grecaptcha
+      if (grecaptcha && recaptchaRef.current && recaptchaId == null) {
+        try {
+          const id = grecaptcha.render(recaptchaRef.current, {
+            sitekey: siteKey,
+            size: 'invisible',
+            callback: (token) => doSubmitWithToken(token),
+            'error-callback': () => {
+              setSubmitting(false)
+              alert('reCAPTCHA failed. Please try again.')
+            },
+            'expired-callback': () => {
+              // optional: prompt a retry if needed
+            }
+          })
+          setRecaptchaId(id)
+        } catch {}
+      } else {
+        setTimeout(attemptRender, 300)
+      }
+    }
+    attemptRender()
+    return () => { cancelled = true }
+  }, [siteKey, recaptchaId])
+
+  const finishSubmit = (extra = {}) => {
+    // Simulate submission; in a real app, POST to an API or Firebase Storage/Firestore
+    const payload = {
+      ...values,
+      ...extra,
+      images: images.map(({ file }) => ({ name: file.name, size: file.size, type: file.type })),
+      submittedAt: new Date().toISOString(),
+    }
+    console.log('Work order submitted:', payload)
+
+    setSubmitted(true)
+    // optional: reset form after brief success
+    setTimeout(() => {
+      setValues({ firstName: '', lastName: '', company: '', email: '', phone: '', address: '', zip: '', description: '' })
+      setImages(prev => {
+        prev.forEach(img => URL.revokeObjectURL(img.url))
+        return []
+      })
+    }, 1200)
+  }
+
+  const doSubmitWithToken = (token) => {
+    setSubmitting(false)
+    finishSubmit({ recaptchaToken: token })
+    try {
+      if (window.grecaptcha && recaptchaId != null) {
+        window.grecaptcha.reset(recaptchaId)
+      }
+    } catch {}
+  }
 
   const onSubmit = (e) => {
     e.preventDefault()
@@ -99,23 +168,18 @@ function WorkOrderForm() {
       return
     }
 
-    // Simulate submission; in a real app, POST to an API or Firebase Storage/Firestore
-    const payload = {
-      ...values,
-      images: images.map(({ file }) => ({ name: file.name, size: file.size, type: file.type })),
-      submittedAt: new Date().toISOString(),
+    // If reCAPTCHA is configured and rendered, execute it; otherwise fallback to direct submit
+    if (siteKey && recaptchaId != null && window.grecaptcha) {
+      setSubmitting(true)
+      try {
+        window.grecaptcha.execute(recaptchaId)
+      } catch {
+        setSubmitting(false)
+        finishSubmit()
+      }
+    } else {
+      finishSubmit()
     }
-    console.log('Work order submitted:', payload)
-
-    setSubmitted(true)
-    // optional: reset form after brief success
-    setTimeout(() => {
-      setValues({ firstName: '', lastName: '', company: '', email: '', phone: '', address: '', zip: '' })
-      setImages(prev => {
-        prev.forEach(img => URL.revokeObjectURL(img.url))
-        return []
-      })
-    }, 1200)
   }
 
   return (
@@ -159,6 +223,21 @@ function WorkOrderForm() {
               <label htmlFor="address">Address</label>
               <input id="address" name="address" type="text" value={values.address} onChange={onChange} onBlur={() => setTouched(t => ({ ...t, address: true }))} autoComplete="street-address" required aria-invalid={addressInvalid} />
             </div>
+
+            <div className="form-field form-field--full">
+              <label htmlFor="description">Description</label>
+              <textarea
+                id="description"
+                name="description"
+                value={values.description}
+                onChange={onChange}
+                placeholder="Describe the issue or request"
+                rows={4}
+                required
+                aria-invalid={descriptionInvalid}
+                onBlur={() => setTouched(t => ({ ...t, description: true }))}
+              />
+            </div>
           </div>
 
           <div className={`upload ${dragOver ? 'is-dragover' : ''}`} onDragOver={onDragOver} onDragLeave={onDragLeave} onDrop={onDrop}>
@@ -198,9 +277,16 @@ function WorkOrderForm() {
           </div>
 
           <div className="form-actions">
-            <button type="submit" className="sub-nav-cta">Submit Work Order</button>
+            <button type="submit" className="sub-nav-cta" disabled={submitting}>
+              {submitting ? 'Verifying…' : 'Submit Work Order'}
+            </button>
             {submitted && <span className="form-success" role="status">Submitted! We’ll be in touch.</span>}
           </div>
+
+          {/* Invisible reCAPTCHA container (hidden) */}
+          {siteKey && (
+            <div ref={recaptchaRef} style={{ display: 'none' }} />
+          )}
         </form>
       </div>
     </section>
